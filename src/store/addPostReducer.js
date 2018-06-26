@@ -3,6 +3,7 @@ import { ImageManipulator } from 'expo'
 import qs from 'qs'
 
 const ADD_NEW_POST = 'ADD_NEW_POST'
+const HOST_IP_ADDRESS='172.17.20.201'
 
 const addNewPost = (newPost) => {
   return {
@@ -29,7 +30,8 @@ export const addNewPostThunk = (info) => {
 
 
 
-      const rawResponse = await fetch('http://172.17.20.159:8080/api/posts/', {
+      // const rawResponse = await fetch('http://172.17.20.159:8080/api/posts/', {
+      const rawResponse = await fetch(`http://${HOST_IP_ADDRESS}:8080/api/posts/`, {
         method: 'POST',
         headers: {
           'X-AYLIEN-TextAPI-Application-ID': '6aca562c',

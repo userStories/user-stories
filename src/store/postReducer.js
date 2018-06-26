@@ -4,6 +4,7 @@ import axios from 'axios';
 const GET_SINGLE_POST = "GET_SINGLE_POST"
 const GET_ALL_POSTS = "GET_ALL_POSTS"
 const GET_POST_ID = "GET_POST_ID"
+const HOST_IP_ADDRESS='172.17.20.201'
 
 const getSinglePost = post => {
     return {
@@ -38,9 +39,10 @@ export const getSinglePostThunk = postId =>{
         try{
             console.log('postId in thunk: ', postId)
             // const {data} = await axios.get(`http://localhost:8080/api/posts/${postId}`)
-            const {data} = await axios.get(`http://172.17.20.159:8080/api/posts/${postId}`)
+            // const {data} = await axios.get(`http://172.17.20.159:8080/api/posts/${postId}`)
             // const {data} = await axios.get(`http://192.168.1.106:8080/api/posts/${postId}`)
             // const {data} = await axios.get(`http://172.31.98.214:8080/api/posts/${postId}`)
+            const {data} = await axios.get(`http://${HOST_IP_ADDRESS}:8080/api/posts/${postId}`)
 
             console.log('data in thunk: ', data)
             dispatch(getSinglePost(data))
@@ -65,9 +67,10 @@ export const getAllPostsThunk = () => {
     return async (dispatch) =>{
         try{
             // const {data} = await axios.get('http://localhost:8080/api/posts')
-            const {data} = await axios.get(`http://172.17.20.159:8080/api/posts`)
+            // const {data} = await axios.get(`http://172.17.20.159:8080/api/posts`)
             // const {data} = await axios.get(`http://192.168.1.106:8080/api/posts`)
             // const {data} = await axios.get(`http://172.31.98.214:8080/api/posts)
+            const {data} = await axios.get(`http://${HOST_IP_ADDRESS}:8080/api/posts`)
 
             console.log('data in all posts thunk: ', data)
             dispatch(getAllPosts(data))
