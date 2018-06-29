@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
 import { auth } from '../store/authReducer';
+import Loader from './Loader'
 
 class Signup extends Component {
   constructor () {
@@ -12,19 +13,26 @@ class Signup extends Component {
       lastName: '',
       email: '',
       password: '',
-      location: ''
+      location: '',
+      loading: false,
+      formError: false
     }
   }
 
-  // validateSignup = () => {
+  validateSignup = async () => {
+    this.setState({ loading: true })
+    const { firstName, lastName, email, password, location } = this.state
+    const res = await this.props.submitNewUser(email, password, 'signup', location, firstName, lastName)
+      res.status === 200 
+      ? this.signup()
+      : this.setState({ formError: true, loading: false })
 
-  // }
+  }
 
   signup = () => {
-    const { navigate } = this.props.navigation
-    const { firstName, lastName, email, password, location } = this.state
-    this.props.submitNewUser(email, password, 'signup', location, firstName, lastName)
-    navigate('Home')
+    this.setState({ loading: false })
+    const { push } = this.props.navigation
+    push('Home')
   }
 
   render () {
@@ -59,10 +67,19 @@ class Signup extends Component {
           onChangeText={location => this.setState({ location })}
           placeholder="Location"
         />
+        {this.state.formError && 
+          (
+            <Text>
+              Data Invalid! Make sure your email is valid and you entered a passoword!
+            </Text>
+          )
+        }
         <Button
           title="Signup"
-          onPress={this.signup}
+          onPress={this.validateSignup}
         />
+        <Loader 
+          loading={this.state.loading} />
       </View>
     )
   }

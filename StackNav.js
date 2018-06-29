@@ -1,55 +1,14 @@
-import React from 'react'
+import { createStackNavigator } from 'react-navigation'
 import { StyleSheet } from 'react-native'
-import { Provider, connect } from 'react-redux'
-import StackNav from './StackNav'
-import store, { persistor } from './src/store'
-import { PersistGate } from 'redux-persist/lib/integration/react'
-
-// import {createMaterialBottomTabNavigator} from 'react-navigation-material-bottom-tabs'
-
-class App extends React.Component {
-  constructor () {
-    super()
-    this.state = {
-      loggedInUser: {}
-    }
-  }
-
-  render () {
-    const isLoggedIn = !!this.state.loggedInUser.id
-    console.log(isLoggedIn)
-    return (
-      <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <StackNav />
-        </PersistGate>
-      </Provider>
-    )
-  }
-}
-
-
-
-// const Tabs = createMaterialBottomTabNavigator({
-//   Home: {screen: MyMap},
-//   Post: {screen: NewPost},
-//   Profile: {screen: UserProfile},
-//   // Location: {screen: MyLocation},
-// }, {
-//   initialRouteName: 'Home',
-//   activeTintColor: '#F44336',
-//   barStyle: { paddingBottom: 20 }
-// })
-// const MainStack = createSwitchNavigator({
-//   map: {
-//     screen: MyMap
-//   },
-//   main: {
-//     screen: Tabs
-//   },
-// }, {
-//   animationEnabled: true
-// })
+import UserProfile from './src/components/UserProfile'
+import Signup from './src/components/Signup'
+import Login from './src/components/Login'
+import Home from './src/components/Home'
+import MyMap, { MyLocation } from './src/components/MyMap'
+import NewPost from './src/components/NewPost'
+import TakePicture from './src/components/TakePicture'
+import RecordVideo from './src/components/RecordVideo'
+import SinglePost from './src/components/SinglePost'
 
 const StackNav = createStackNavigator({
   Home: {
@@ -132,9 +91,4 @@ const styles = StyleSheet.create({
   }
 })
 
-// const switchView = createSwitchNavigator({
-  
-// })
-
-export default App
-
+export default StackNav

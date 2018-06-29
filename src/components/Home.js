@@ -16,9 +16,7 @@ class Home extends React.Component {
   }
 
   componentDidMount () {
-    console.log('home mounted')
     const user = this.props.loggedInUser
-    console.log('home componentdidmount', user)
     this.setState({loggedInUser: user})
   }
 
@@ -40,8 +38,6 @@ class Home extends React.Component {
 
   render() {
     const isLoggedIn = !!this.state.loggedInUser.id
-    console.log(this.state.loggedInUser)
-    console.log(isLoggedIn)
     return (
       <View>
         <Text style={styles.titleText}>Home Component</Text>
