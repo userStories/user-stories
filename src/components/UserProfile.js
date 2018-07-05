@@ -80,6 +80,7 @@ class UserProfile extends Component {
                 })
                 .map(post =>
                 <View
+                  key={post.id}
                   style={styles.mediaWrapper}>
                   {
                     imageExt.indexOf(post.mediaLink.slice(-3)) !== -1 ?

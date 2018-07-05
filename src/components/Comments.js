@@ -41,7 +41,7 @@ export default class CommentSection extends Component {
               })
               .map((comment, index) => {
                   return (
-                    <View style={styles.commentWrap}>
+                    <View key={comment.id}  style={styles.commentWrap}>
                         <View style={styles.innerViewWrap}>
                             {users.find(user => user.id === comment.userId) &&
                             <Text style={{fontWeight: 'bold', color: '#00a8ff', marginBottom: '1%'}}>{users.find(user => user.id === comment.userId).fullName}</Text>

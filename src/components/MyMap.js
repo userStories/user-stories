@@ -20,28 +20,27 @@ import { Button } from 'react-native-elements'
 
 const { width, height } = Dimensions.get('window');
 
-// const CARD_HEIGHT = height / 4;
-// const CARD_WIDTH = CARD_HEIGHT - 50;
-const CARD_HEIGHT = 105;
-const CARD_WIDTH = 140;
+// const CARD_HEIGHT = 105;
+// const CARD_WIDTH = 140;
+
+// const CARD_HEIGHT = 133;
+// const CARD_WIDTH = 170;
+const CARD_HEIGHT = 135;
+const CARD_WIDTH = 160;
+
+const LATITUDE_DELTA = 0.00522;
+const LONGITUDE_DELTA = Dimensions.get('window').width / Dimensions.get('window').height * 0.00522
 
 class MyMap extends Component {
 		// constructor(){
 		// 	super()
 			state = {
 				currentMarker: null,
-        // focusedLocation: {
-					latitude: 41.89557129,
-					longitude: -87.6386050932,
-					// latitudeDelta: 0.00522,
-					// longitudeDelta:
-					// Dimensions.get('window').width /
-					// Dimensions.get('window').height * 0.00522
-				// }
+        latitude: 41.89557129,
+        longitude: -87.6386050932,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
 			}
-			// this.callOutHide = this.callOutHide.bind(this)
-			// this.callOutShow = this.callOutShow.bind(this)
-		// }
 			
 		callOutShow = () => {
 			this.currentMarker.showCallout();
@@ -59,7 +58,9 @@ class MyMap extends Component {
 		componentDidMount() {
       this.setState({
         latitude: this.props.defaultLocation.latitude,
-        longitude: this.props.defaultLocation.longitude
+        longitude: this.props.defaultLocation.longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA
       })
 			this.props.viewAllPosts()
 			this.props.viewAllCategories()
@@ -81,15 +82,15 @@ class MyMap extends Component {
 				clearTimeout(this.regionTimeout);
 				this.regionTimeout = setTimeout(() => {
 					if (this.index !== index) {
-						// this.callOutHide();
 						this.index = index;
 						const post = this.props.allPosts[index];
-
 						
 						this.setState({
-									latitude: this.props.allPosts[index].latitude,
-									longitude: this.props.allPosts[index].longitude,
-						})
+									latitude: post.latitude,
+									longitude: post.longitude,
+                  latitudeDelta: LATITUDE_DELTA,
+                  longitudeDelta: LONGITUDE_DELTA
+            })
 						
 						console.log( 'Pick Location lat:' + 
 							this.state.latitude + ' long:' + 
@@ -100,9 +101,9 @@ class MyMap extends Component {
 							{
 								latitude: this.props.allPosts[index].latitude,
 								longitude: this.props.allPosts[index].longitude,
-								// latitudeDelta: this.state.focusedLocation.latitudeDelta,
-								// longitudeDelta: this.state.focusedLocation.longitudeDelta,
-							},
+                latitudeDelta: LATITUDE_DELTA,
+                longitudeDelta: LONGITUDE_DELTA
+              },
 							350
 						);
 						this.callOutShow();
@@ -113,13 +114,12 @@ class MyMap extends Component {
 	
     pickLocationHandler = (event) => {
         const coords = event.nativeEvent.coordinate;
-        this.setState(prevState => {
+        this.setState( () => {
             return {
-                // focusedLocation: {
-                    // ...prevState.focusedLocation,
-                    latitude: coords.latitude,
-                    longitude: coords.longitude,
-                
+              latitude: coords.latitude,
+              longitude: coords.longitude,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA
             }
         })
     }
@@ -131,13 +131,11 @@ class MyMap extends Component {
 
     render() {
       const videoExt = ['mp4', 'mp3', 'avi', 'flv', 'mov', 'wmv'];
-      // let newreg = this.state.focusedLocation
       let newreg = {
         latitude: this.state.latitude,
         longitude: this.state.longitude,
-        latitudeDelta: 0.00522,
-        longitudeDelta: Dimensions.get('window').width /
-        Dimensions.get('window').height * 0.00522
+        latitudeDelta: this.state.latitudeDelta,
+        longitudeDelta: this.state.longitudeDelta
       }
         return (
             <View style={styles.container}>
@@ -256,34 +254,6 @@ class MyMap extends Component {
             ))}
           </Animated.ScrollView>
 				</View> 
-				<View style={styles.container}>
-
-                <View style={styles.button}>
-                    <View><Button title='Category Filter' buttonStyle={styles.filterButton} onPress={() => this.popupDialog2.show()}/></View>
-                    <View><Button title="Post" buttonStyle={styles.buttonPost} onPress={() => this.props.navigation.navigate('NewPost')} /></View>
-                    <View><Button title="Locate Me" buttonStyle={styles.buttonLocate} onPress={() => alert('Pick Location lat:' + this.state.latitude + ' long:' + this.state.longitude)} /></View>
-                </View>
-				</View> 
-                    <PopupDialog
-                        width={0.5}
-                        height={0.3}
-                        overlayOpacity={0.6}
-                        haveTitleBar={true}
-                        ref={(popupDialog) => { this.popupDialog2 = popupDialog }}>
-                        <View style={styles.container}>
-                            <Text style={styles.title}>Category Filter</Text>
-                             <Picker
-                              selectedValue={this.props.filterId}
-                              style={{ height: 100, width: 100, position: "absolute", top: 100}}
-                              onValueChange={(itemValue, itemIndex) => this.props.changeFilterId(itemValue)}>
-                              <Picker.Item label="All" value={0} />
-                              {this.props.allCategories.map((category,index) =>{
-                              	return <Picker.Item key={index} label={category.title} value={category.id} />
-                            })}
-                          </Picker> 
-                        </View>
-                    </PopupDialog>
-
 			</View> 
         )
     }
@@ -292,7 +262,21 @@ class MyMap extends Component {
 export function MyLocation(){
 	alert('Pick Location lat:' + 
 	this.state.latitude + ' long:' + 
-	this.state.longitude)
+  this.state.longitude )
+
+  let coordinate = {
+    latitude: this.state.latitude,
+    longitude: this.state.longitude
+  }
+
+  this.state.map.animateToRegion(
+    {
+      latitude: coordinate.latitude,
+      longitude: coordinate.longitude,
+    },
+    350
+  );
+
 }
 
 const styles = StyleSheet.create({
@@ -303,23 +287,14 @@ const styles = StyleSheet.create({
 	},
 	
   map: {
-    // borderWidth: 1,
-    // borderColor: 'red',
     backgroundColor: '#eee',
     width: '100%',
-    height: 500
+    height: '78%'
 	},
 
 	mapMarker:{
 		alignItems: 'center',
 	},
-  // containerButton: {
-	// 	flex: 2,
-	// 	flexDirection: 'row',
-  //   width: '100%',
-  //   // alignItems: 'center'
-	// },
-
 	button: {
 			margin: 8,
 			marginTop: 30,
@@ -350,15 +325,14 @@ filterButton: {
 	},
 scrollViewContainer: {
     flex: 1,
+    width: '100%',
+    height: '20%'
   },
   scrollView: {
     position: 'absolute',
-    // bottom: 30,
     left: 0,
     right: 0,
     paddingVertical: 5,
-    // borderWidth: 1,
-    // borderColor: 'red',
   },
   endPadding: {
     paddingRight: width - CARD_WIDTH,
@@ -403,12 +377,12 @@ scrollViewContainer: {
     flex: 1,
   },
   cardtitle: {
-    fontSize: 8,
+    fontSize: 10,
     marginTop: 3,
     fontWeight: "bold",
   },
   cardDescription: {
-    fontSize: 8,
+    fontSize: 9,
     color: "#444",
   },
 });

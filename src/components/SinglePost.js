@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
 
   },
   commentButtons: {
-    borderColor: '#eee',
     borderWidth: 3,
     paddingLeft: 10,
     paddingRight: 10,
