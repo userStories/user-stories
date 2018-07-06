@@ -21,7 +21,7 @@ class ActivityLog extends Component {
     nowLoaded = () => {
         this.setState({loading: false})
     }
-
+    //recommit
     render(){
         const {allPosts, loggedInUser, loggedInUserAuth} = this.props
         const imageExt = ['jpeg', 'jpg', 'png', 'gif']
@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
     elemText: {
         alignSelf: 'center',
         color: '#00a8ff',
+        textAlign: 'center',
         fontSize: 12,
         marginTop: 10,
         marginBottom: 10,
